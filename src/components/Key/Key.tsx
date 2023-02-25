@@ -7,13 +7,19 @@ import { BoardContext, BoardContextType } from 'context/boardContext';
 type KeyProps = {
   value: string;
   isLong?: boolean;
-  onClick: (value: string) => void;
 };
 
-const Key: FC<KeyProps> = ({ value, isLong, onClick }) => {
-  const { setBoard } = useContext(BoardContext) as BoardContextType;
+const Key: FC<KeyProps> = ({ value, isLong }) => {
+  const { onAddChar, onDeleteChar, onEnter } = useContext(BoardContext) as BoardContextType;
+
   const handleClick = () => {
-    onClick(value);
+    if (value === 'Ввод') {
+      onEnter();
+    } else if (value === 'Удалить') {
+      onDeleteChar();
+    } else {
+      onAddChar(value);
+    }
   };
 
   return (

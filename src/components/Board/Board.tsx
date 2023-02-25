@@ -4,11 +4,11 @@ import Line from 'components/Line';
 
 import styles from './Board.module.scss';
 
-type BoardProps = {
-  values: string[];
-};
+// type BoardProps = {
+//   values: string[];
+// };
 
-const Board: FC<BoardProps> = ({ values }) => {
+const Board: FC = () => {
   return (
     <div className={styles.board}>
       <Line linePos={0} />
