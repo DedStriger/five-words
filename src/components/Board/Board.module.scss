@@ -1,0 +1,7 @@
+@import 'assets/styles/mixins.scss';
+
+.board {
+  @include d-flex-f-column;
+  flex-grow: 1;
+  justify-content: center;
+}

@@ -1,0 +1,9 @@
+.line {
+  display: flex;
+  margin-bottom: 4px;
+  column-gap: 4px;
+
+  &:nth-last-child(1) {
+    margin-bottom: 0;
+  }
+}

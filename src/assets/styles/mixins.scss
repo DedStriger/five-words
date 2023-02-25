@@ -1,0 +1,14 @@
+@mixin d-flex-a-center {
+  display: flex;
+  align-items: center;
+}
+
+@mixin d-flex-j-center-a-center {
+  @include d-flex-a-center;
+  justify-content: center;
+}
+
+@mixin d-flex-f-column {
+  display: flex;
+  flex-direction: column;
+}

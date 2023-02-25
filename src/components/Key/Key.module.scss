@@ -1,0 +1,26 @@
+@import 'assets/styles/mixins.scss';
+@import 'assets/styles/variables.scss';
+
+.key {
+  @include d-flex-j-center-a-center;
+  background-color: $light-grey;
+  height: 56px;
+  width: 40px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 0 solid #e5e7eb;
+  border-radius: 4px;
+  text-transform: uppercase;
+
+  &:hover {
+    background-color: #cbd5e1;
+  }
+
+  &:active {
+    background-color: #94a3b8;
+  }
+
+  &_long {
+    width: 65px;
+  }
+}
