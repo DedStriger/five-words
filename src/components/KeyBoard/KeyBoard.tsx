@@ -1,45 +1,71 @@
-import { FC, useState } from 'react';
+import { FC, useContext, useEffect, useCallback } from 'react';
 
 import Key from 'components/Key';
+import { BoardContext, BoardContextType } from 'context/boardContext';
+import { TOP_LINE, BOTTOM_LINE, MID_LINE } from 'utils/constants/keyBoardSettings';
 
 import styles from './KeyBoard.module.scss';
 
-// type KeyBoardProps = {
-//   onAddValue: (value: string) => void;
-//   onDeleteValue: () => void;
-// };
-
-const topValues = ['й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ'];
-const middleValues = ['ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э'];
-const bottomValues = ['я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю'];
-
 const KeyBoard: FC = () => {
-  // const onClick = (value: string) => {
-  //   if (value === 'Удалить') {
-  //     onDeleteValue();
-  //   } else {
-  //     onAddValue(value);
-  //   }
-  // };
+  const { onAddChar, onDeleteChar, onEnter } = useContext(BoardContext) as BoardContextType;
+
+  const onClick = useCallback(
+    (value: string) => {
+      if (value === 'Ввод') {
+        onEnter();
+      } else if (value === 'Удалить') {
+        onDeleteChar();
+      } else {
+        onAddChar(value);
+      }
+    },
+    [onAddChar, onDeleteChar, onEnter],
+  );
+
+  const onKeyBoard = useCallback(
+    (e: KeyboardEvent) => {
+      const key = e.key;
+
+      if (key === 'Enter') {
+        onEnter();
+      } else if (key === 'Backspace') {
+        onDeleteChar();
+      } else {
+        const availableKeys = [...TOP_LINE, ...BOTTOM_LINE, ...MID_LINE];
+        const isKeyExists = availableKeys.indexOf(key.toUpperCase()) > 0;
+
+        if (isKeyExists) {
+          onAddChar(key);
+        }
+      }
+    },
+    [onAddChar, onDeleteChar, onEnter],
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', onKeyBoard);
+
+    return () => document.removeEventListener('keydown', onKeyBoard);
+  }, [onKeyBoard]);
 
   return (
     <div>
       <div className={styles.keyboard__line}>
-        {topValues.map((item, i) => (
-          <Key key={`${item}${i}`} value={item} />
+        {TOP_LINE.map((item, i) => (
+          <Key key={`${item}${i}`} value={item} onClick={onClick} />
         ))}
       </div>
       <div className={styles.keyboard__line}>
-        {middleValues.map((item, i) => (
-          <Key key={`${item}${i}`} value={item} />
+        {MID_LINE.map((item, i) => (
+          <Key key={`${item}${i}`} value={item} onClick={onClick} />
         ))}
       </div>
       <div className={styles.keyboard__line}>
-        <Key value='Удалить' isLong />
-        {bottomValues.map((item, i) => (
-          <Key key={`${item}${i}`} value={item} />
+        <Key value='Удалить' isLong onClick={onClick} />
+        {BOTTOM_LINE.map((item, i) => (
+          <Key key={`${item}${i}`} value={item} onClick={onClick} />
         ))}
-        <Key value='Ввод' isLong />
+        <Key value='Ввод' isLong onClick={onClick} />
       </div>
     </div>
   );

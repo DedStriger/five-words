@@ -1,25 +1,17 @@
-import { FC, useContext } from 'react';
+import { FC } from 'react';
 import cl from 'classnames';
 
 import styles from './Key.module.scss';
-import { BoardContext, BoardContextType } from 'context/boardContext';
 
 type KeyProps = {
   value: string;
   isLong?: boolean;
+  onClick: (value: string) => void;
 };
 
-const Key: FC<KeyProps> = ({ value, isLong }) => {
-  const { onAddChar, onDeleteChar, onEnter } = useContext(BoardContext) as BoardContextType;
-
+const Key: FC<KeyProps> = ({ value, isLong, onClick }) => {
   const handleClick = () => {
-    if (value === 'Ввод') {
-      onEnter();
-    } else if (value === 'Удалить') {
-      onDeleteChar();
-    } else {
-      onAddChar(value);
-    }
+    onClick(value);
   };
 
   return (
