@@ -6,4 +6,26 @@
   &:nth-last-child(1) {
     margin-bottom: 0;
   }
+
+  &_shaked {
+    animation: shake 250ms linear;
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-0.5rem, 0);
+  }
+  50% {
+    transform: translate(0.5rem, 0);
+  }
+  75% {
+    transform: translate(-0.5rem, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }

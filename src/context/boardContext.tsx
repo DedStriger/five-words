@@ -13,6 +13,11 @@ export type BoardContextType = {
   onAddChar: (value: string) => void;
   onDeleteChar: () => void;
   onEnter: () => void;
+  exactChars: string[];
+  emptyChars: string[];
+  existsChars: string[];
+  winningWord: string;
+  lineShouldToShake: number | null;
 };
 
 export const BoardContext = createContext<BoardContextType | null>(null);

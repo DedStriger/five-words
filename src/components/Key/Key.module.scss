@@ -12,15 +12,27 @@
   border-radius: 4px;
   text-transform: uppercase;
 
-  &:hover {
+  &:not(.key_empty):not(.key_exists):not(.key_exact):hover {
     background-color: #cbd5e1;
   }
 
   &:active {
-    background-color: #94a3b8;
+    background-color: $dark-grey;
   }
 
   &_long {
     width: 65px;
+  }
+
+  &_empty {
+    background-color: $empty;
+  }
+
+  &_exists {
+    background-color: $exist;
+  }
+
+  &_exact {
+    background-color: $exact;
   }
 }

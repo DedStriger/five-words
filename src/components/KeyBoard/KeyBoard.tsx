@@ -24,11 +24,11 @@ const KeyBoard: FC = () => {
 
   const onKeyBoard = useCallback(
     (e: KeyboardEvent) => {
-      const key = e.key;
+      const key = e.key.toUpperCase();
 
-      if (key === 'Enter') {
+      if (key === 'ENTER') {
         onEnter();
-      } else if (key === 'Backspace') {
+      } else if (key === 'BACKSPACE') {
         onDeleteChar();
       } else {
         const availableKeys = [...TOP_LINE, ...BOTTOM_LINE, ...MID_LINE];
