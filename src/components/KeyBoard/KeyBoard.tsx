@@ -1,13 +1,16 @@
 import { FC, useContext, useEffect, useCallback } from 'react';
 
-import Key from 'components/Key';
 import { BoardContext, BoardContextType } from 'context/boardContext';
 import { TOP_LINE, BOTTOM_LINE, MID_LINE } from 'utils/constants/keyBoardSettings';
+
+import Key from 'components/Key';
 
 import styles from './KeyBoard.module.scss';
 
 const KeyBoard: FC = () => {
-  const { onAddChar, onDeleteChar, onEnter } = useContext(BoardContext) as BoardContextType;
+  const { onAddChar, onDeleteChar, onEnter, currentLine } = useContext(
+    BoardContext,
+  ) as BoardContextType;
 
   const onClick = useCallback(
     (value: string) => {
@@ -49,7 +52,7 @@ const KeyBoard: FC = () => {
   }, [onKeyBoard]);
 
   return (
-    <div>
+    <div className={styles.keyboard}>
       <div className={styles.keyboard__line}>
         {TOP_LINE.map((item, i) => (
           <Key key={`${item}${i}`} value={item} onClick={onClick} />
@@ -61,11 +64,11 @@ const KeyBoard: FC = () => {
         ))}
       </div>
       <div className={styles.keyboard__line}>
-        <Key value='Удалить' isLong onClick={onClick} />
+        <Key value='Ввод' isEnter onClick={onClick} isDisbaled={currentLine.cellpos !== 5} />
         {BOTTOM_LINE.map((item, i) => (
           <Key key={`${item}${i}`} value={item} onClick={onClick} />
         ))}
-        <Key value='Ввод' isLong onClick={onClick} />
+        <Key value='Удалить' isDelete onClick={onClick} isDisbaled={currentLine.cellpos === 0} />
       </div>
     </div>
   );

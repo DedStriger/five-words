@@ -1,4 +1,10 @@
 .keyboard {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% + 16px);
+  gap: 16px;
+  --key-height: 44px;
+
   &__line {
     display: flex;
     justify-content: center;
@@ -7,6 +13,15 @@
 
     &:nth-last-child(1) {
       margin-bottom: 0;
+    }
+  }
+}
+
+@media (min-width: 600px) and (min-height: 600px) {
+  .keyboard {
+    --key-height: 60px;
+    &__line {
+      margin-bottom: 12px;
     }
   }
 }

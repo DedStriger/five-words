@@ -1,58 +1,39 @@
 import { useState } from 'react';
 
-import KeyBoard from 'components/KeyBoard';
-import { BoardContext } from 'context/boardContext';
-import { CELLS_IN_LINE, CHAR_FLIP_DELAY } from 'utils/constants/boardSettings';
-
-import Board from '../components/Board';
-
-import './App.scss';
 import { wordInWordsSet } from 'utils/helpers/wordInWordsSet';
 import { sleep } from 'utils/helpers/sleep';
+import { useCharsState } from 'hooks/useCharsState';
+import {
+  INITIAL_BOARD,
+  CELLS_IN_LINE,
+  TOTAL_LINES,
+  CHAR_FLIP_DELAY,
+} from 'utils/constants/boardSettings';
 
-const initialBoard = [
-  ['', '', '', '', ''],
-  ['', '', '', '', ''],
-  ['', '', '', '', ''],
-  ['', '', '', '', ''],
-  ['', '', '', '', ''],
-  ['', '', '', '', ''],
-];
+import KeyBoard from 'components/KeyBoard';
+import Board from '../components/Board';
+import { BoardContext } from 'context/boardContext';
+
+import './App.scss';
 
 const App = () => {
-  const [board, setBoard] = useState<string[][]>(initialBoard);
+  const [board, setBoard] = useState<string[][]>(INITIAL_BOARD);
   const [currentLine, setCurrentLine] = useState({ linepos: 0, cellpos: 0 });
-  const [exactChars, setExactChars] = useState<string[]>([]);
-  const [emptyChars, setEmptyChars] = useState<string[]>([]);
-  const [existsChars, setExistsChars] = useState<string[]>([]);
   const [lineShouldToShake, setLineShouldToShake] = useState<number | null>(null);
-
+  const [gameOver, setGameOver] = useState({});
   const winningWord = 'дупло';
 
-  const getExactChars = () => {
-    const winningChars = winningWord.toUpperCase().split('');
-
-    board.forEach((word) => {
-      word.forEach((char, i) => {
-        if (!winningChars.includes(char)) {
-          return setEmptyChars((chars) => Array.from(new Set([...chars, char])));
-        }
-
-        if (char === winningChars[i]) {
-          return setExactChars((chars) => Array.from(new Set([...chars, char])));
-        }
-
-        if (char !== winningChars[i]) {
-          return setExistsChars((chars) => Array.from(new Set([...chars, char])));
-        }
-      });
-    });
-  };
+  const { exactChars, emptyChars, existsChars, getCharsState } = useCharsState(winningWord, board);
 
   const onAddChar = (value: string) => {
     if (currentLine.cellpos >= CELLS_IN_LINE) {
       return;
     }
+
+    if (currentLine.linepos >= TOTAL_LINES) {
+      return;
+    }
+
     const copyBoard = [...board];
     copyBoard[currentLine.linepos][currentLine.cellpos] = value;
 
@@ -80,21 +61,24 @@ const App = () => {
 
     if (!wordInWordsSet(currentWord)) {
       setLineShouldToShake(currentLine.linepos);
-      // console.log(currentLine);
-      return setTimeout(() => setLineShouldToShake(null), 1000);
+      await sleep(250);
+      setLineShouldToShake(null);
+      return;
     }
 
-    // setTimeout(getExactChars, CHAR_FLIP_DELAY * CELLS_IN_LINE);
     setCurrentLine({ linepos: currentLine.linepos + 1, cellpos: 0 });
     await sleep(CHAR_FLIP_DELAY * CELLS_IN_LINE);
-    getExactChars();
+    getCharsState();
 
     if (currentWord === winningWord.toUpperCase()) {
-      alert('Krasava');
+      setGameOver({ gameOver: true, win: true });
+      return;
     }
 
-    // console.log(wordInWordsSet(currentWord));
-    // console.log(board[currentLine.linepos].join(''));
+    if (currentLine.linepos === TOTAL_LINES) {
+      setGameOver({ gameOver: true, win: false });
+      return;
+    }
   };
 
   return (
@@ -114,10 +98,10 @@ const App = () => {
           winningWord,
           lineShouldToShake,
         }}>
-        <div className='play-zone'>
+        <main className='play-zone'>
           <Board />
           <KeyBoard />
-        </div>
+        </main>
       </BoardContext.Provider>
     </div>
   );

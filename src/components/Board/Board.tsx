@@ -4,10 +4,6 @@ import Line from 'components/Line';
 
 import styles from './Board.module.scss';
 
-// type BoardProps = {
-//   values: string[];
-// };
-
 const Board: FC = () => {
   return (
     <div className={styles.board}>
@@ -16,6 +12,7 @@ const Board: FC = () => {
       <Line linePos={2} />
       <Line linePos={3} />
       <Line linePos={4} />
+      <Line linePos={5} />
     </div>
   );
 };

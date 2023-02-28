@@ -10,5 +10,10 @@
   @include d-flex-a-center;
   flex-direction: column;
   flex-grow: 1;
-  padding-bottom: 20px;
+  padding-bottom: 96px;
+  padding-left: 16px;
+  padding-right: 16px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
 }

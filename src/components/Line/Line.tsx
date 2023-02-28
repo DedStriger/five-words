@@ -1,10 +1,11 @@
 import { FC, useContext } from 'react';
 import cl from 'classnames';
 
+import { BoardContext, BoardContextType } from 'context/boardContext';
+
 import Cell from 'components/Cell';
 
 import styles from './Line.module.scss';
-import { BoardContext, BoardContextType } from 'context/boardContext';
 
 type LineProps = {
   linePos: number;

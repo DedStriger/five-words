@@ -1,14 +1,25 @@
+@import 'assets/styles/variables.scss';
+
 .line {
   display: flex;
-  margin-bottom: 4px;
-  column-gap: 4px;
+  margin-bottom: 8px;
+  column-gap: 6px;
+  max-height: 118px;
+  max-width: 568px;
+  width: 100%;
+  height: calc(100vw / 5);
+  font-size: calc(1rem + 5vw);
 
   &:nth-last-child(1) {
     margin-bottom: 0;
   }
 
   &_shaked {
-    animation: shake 250ms linear;
+    animation: shake 250ms ease-in;
+  }
+
+  &_shaked div {
+    color: $error;
   }
 }
 
@@ -27,5 +38,11 @@
   }
   100% {
     transform: translate(0, 0);
+  }
+}
+
+@media (min-width: 600px) and (min-height: 600px) {
+  .line {
+    font-size: 58px;
   }
 }

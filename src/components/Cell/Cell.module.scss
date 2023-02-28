@@ -3,94 +3,87 @@
 
 .cell {
   @include d-flex-j-center-a-center;
-  background-color: $white;
-  color: $black;
-  height: 56px;
-  width: 56px;
-  font-weight: 700;
+  background-color: $app-background;
+  color: $letter-color;
+  height: 100%;
+  width: 100%;
+  font-weight: 400;
   line-height: 40px;
-  font-size: 36px;
-  border: 2px solid $light-grey;
-  border-radius: 4px;
+  border: 1px solid $cell-border;
+  border-radius: 6px;
   text-transform: uppercase;
+  user-select: none;
 
   &:not(.cell_active):nth-child(2) {
-    animation-delay: 0.2s;
-  }
-
-  &:not(.cell_active):nth-child(3) {
     animation-delay: 0.4s;
   }
 
-  &:not(.cell_active):nth-child(4) {
-    animation-delay: 0.6s;
-  }
-
-  &:not(.cell_active):nth-child(5) {
+  &:not(.cell_active):nth-child(3) {
     animation-delay: 0.8s;
   }
 
+  &:not(.cell_active):nth-child(4) {
+    animation-delay: 1.2s;
+  }
+
+  &:not(.cell_active):nth-child(5) {
+    animation-delay: 1.6s;
+  }
+
   &_active {
-    border-color: $black;
-    animation: active 0.35s linear;
+    animation: active 0.1s ease-in;
   }
 
   &_exists {
     --background-color: #{$exist};
-    --color: #{$white};
-    text-shadow: 1px 1px 1px $black;
-    --border: 2px solid #{$exist};
-    animation: flip 0.5s ease forwards;
+    --color: #{$letter-exist-color};
+    --border: 1px solid #{$cell-exist-border-color};
+    animation: flip 0.4s ease forwards;
   }
 
   &_exact {
     --background-color: #{$exact};
-    --color: #{$white};
-    text-shadow: 1px 1px 1px $black;
-    --border: 2px solid #{$exact};
-    animation: flip 0.5s ease forwards;
+    --color: #{$letter-exact-color};
+    --border: 1px solid #{$cell-exact-border-color};
+    animation: flip 0.4s ease forwards;
   }
 
   &_empty {
     --background-color: #{$empty};
-    --color: #{$white};
-    text-shadow: 1px 1px 1px $black;
-    --border: 2px solid #{$empty};
-    animation: flip 0.5s ease forwards;
+    --color: #{$letter-empty-color};
+    --border: 1px solid #{$cell-empty-border-color};
+    animation: flip 0.4s ease forwards;
   }
 }
 
 @keyframes active {
   0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
+    transform: translateY(-4px) translateZ(0);
   }
   100% {
-    transform: scale(1);
+    transform: translateY(1px) translateZ(0);
   }
 }
 
 @keyframes flip {
   0% {
-    transform: rotateX(0);
-    background-color: $white;
-    border: 2px solid $light-grey;
+    transform: rotateY(0);
+    background-color: $app-background;
+    border: 1px solid $cell-border;
   }
   45% {
-    transform: rotateX(90deg);
-    background-color: $white;
-    border: 2px solid $light-grey;
+    transform: rotateY(90deg);
+    background-color: $app-background;
+    border: 1px solid $cell-border;
   }
   55% {
-    transform: rotateX(90deg);
+    transform: rotateY(90deg);
     background-color: var(--background-color);
     border: var(--border);
     color: var(--color);
   }
   100% {
-    transform: rotateX(0);
+    transform: rotateY(0);
     background-color: var(--background-color);
     border: var(--border);
     color: var(--color);

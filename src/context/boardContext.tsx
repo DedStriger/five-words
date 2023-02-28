@@ -1,13 +1,9 @@
 import { createContext } from 'react';
-
-type LineType = {
-  linepos: number;
-  cellpos: number;
-};
+import { LineType, BoardType } from 'utils/types/boardTypes';
 
 export type BoardContextType = {
-  board: string[][];
-  setBoard: (board: string[][]) => void;
+  board: BoardType;
+  setBoard: (board: BoardType) => void;
   currentLine: LineType;
   setCurrentLine: ({ linepos, cellpos }: LineType) => void;
   onAddChar: (value: string) => void;
