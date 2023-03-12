@@ -1,0 +1,25 @@
+@import 'assets/styles/variables.scss';
+@import 'assets/styles/mixins.scss';
+
+.bar {
+  @include d-flex-f-column;
+  justify-content: center;
+  background: $modal-background;
+  box-shadow: 0 6px 34px rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  width: calc(100% + 2 * 16px);
+  height: 198px;
+  padding: 18px 30px;
+  color: $white;
+  white-space: break-spaces;
+  gap: 20px;
+  overflow: hidden;
+
+  &__title {
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 24px;
+    color: $yellow;
+    text-align: center;
+  }
+}

@@ -1,27 +1,45 @@
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
-import { wordInWordsSet } from 'utils/helpers/wordInWordsSet';
-import { sleep } from 'utils/helpers/sleep';
 import { useCharsState } from 'hooks/useCharsState';
+import { wordInWordsSet, getWordOfDay } from 'utils/word';
+import { sleep } from 'utils/helpers/sleep';
 import {
   INITIAL_BOARD,
+  INITIAL_CURRENT_LINE,
+  INITIAL_GAME_STATE,
   CELLS_IN_LINE,
   TOTAL_LINES,
   CHAR_FLIP_DELAY,
+  LINE_SHAKE_DURATION,
 } from 'utils/constants/boardSettings';
+import { getFieldFromLocalStorage, saveGameStateToLocalStorage } from 'utils/localStorage';
+import { BoardType, GameType, LineType } from 'types/boardTypes';
 
 import KeyBoard from 'components/KeyBoard';
 import Board from '../components/Board';
 import { BoardContext } from 'context/boardContext';
+import ResultModal from 'components/ResultModal';
+import ResultBar from 'components/ResultBar';
+import Gerb from 'components/Gerb';
 
 import './App.scss';
 
 const App = () => {
-  const [board, setBoard] = useState<string[][]>(INITIAL_BOARD);
-  const [currentLine, setCurrentLine] = useState({ linepos: 0, cellpos: 0 });
+  const winningWord = useMemo(() => getWordOfDay(), []);
+
+  const [board, setBoard] = useState<BoardType>(
+    useMemo(() => getFieldFromLocalStorage<BoardType>('board', winningWord) ?? INITIAL_BOARD, [winningWord]),
+  );
+  const [currentLine, setCurrentLine] = useState(
+    useMemo(() => getFieldFromLocalStorage<LineType>('currentLine', winningWord) ?? INITIAL_CURRENT_LINE, [winningWord]),
+  );
+  const [isGameOver, setIsGameOver] = useState(
+    useMemo(() => getFieldFromLocalStorage<GameType>('isGameOver', winningWord) ?? INITIAL_GAME_STATE, [winningWord]),
+  );
   const [lineShouldToShake, setLineShouldToShake] = useState<number | null>(null);
-  const [gameOver, setGameOver] = useState({});
-  const winningWord = 'дупло';
+  const [winningLine, setWinningLine] = useState<number | null>(null);
+  const [isEntered, setIsEntered] = useState(false);
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
 
   const { exactChars, emptyChars, existsChars, getCharsState } = useCharsState(winningWord, board);
 
@@ -61,25 +79,51 @@ const App = () => {
 
     if (!wordInWordsSet(currentWord)) {
       setLineShouldToShake(currentLine.linepos);
-      await sleep(250);
+      await sleep(LINE_SHAKE_DURATION);
       setLineShouldToShake(null);
       return;
     }
 
+    setIsEntered(false);
     setCurrentLine({ linepos: currentLine.linepos + 1, cellpos: 0 });
     await sleep(CHAR_FLIP_DELAY * CELLS_IN_LINE);
     getCharsState();
+    setIsEntered(true);
 
     if (currentWord === winningWord.toUpperCase()) {
-      setGameOver({ gameOver: true, win: true });
+      setWinningLine(currentLine.linepos);
+      await sleep(1000);
+      setIsGameOver({ gameOver: true, win: true });
       return;
     }
 
     if (currentLine.linepos === TOTAL_LINES) {
-      setGameOver({ gameOver: true, win: false });
+      setIsGameOver({ gameOver: true, win: false });
       return;
     }
   };
+
+  useEffect(() => {
+    if (isGameOver.gameOver) {
+      setIsResultModalOpen(true);
+    } else {
+      setIsResultModalOpen(false);
+    }
+  }, [isGameOver.gameOver]);
+
+  useEffect(() => {
+    if (isEntered) {
+      saveGameStateToLocalStorage({
+        board,
+        currentLine,
+        existsChars,
+        exactChars,
+        emptyChars,
+        isGameOver,
+        winningWord,
+      });
+    }
+  }, [board, currentLine, emptyChars, exactChars, existsChars, isEntered, isGameOver, winningWord]);
 
   return (
     <div className='app'>
@@ -97,11 +141,17 @@ const App = () => {
           existsChars,
           winningWord,
           lineShouldToShake,
+          setIsGameOver,
+          winningLine,
         }}>
         <main className='play-zone'>
           <Board />
-          <KeyBoard />
+          {isGameOver.gameOver ? <ResultBar /> : <KeyBoard />}
+          {/* <KeyBoard /> */}
+          {/* <ResultBar /> */}
+          <Gerb />
         </main>
+        <ResultModal isOpen={isResultModalOpen} setOpen={setIsResultModalOpen} />
       </BoardContext.Provider>
     </div>
   );

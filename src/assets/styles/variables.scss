@@ -9,7 +9,7 @@ $yellow-active: #fab619;
 $exist: $white;
 $exact: $yellow;
 $empty: #5f5f5f;
-$error: #ff0000;
+$error: #fc3b3b;
 $app-background: #1c1c1e;
 $cell-border: #ffdd2d;
 $letter-color: $white;
@@ -21,3 +21,10 @@ $cell-exact-border-color: $yellow;
 $cell-empty-border-color: $empty;
 $key-background-hover: #262626;
 $key-disabled: #404040;
+$modal-background: #2c2c2e;
+$field-background: #414143;
+$closebtn-background: #545456;
+$closebtn-background-hover: #373737;
+
+/* ANMIATION */
+$shake-animation-duration: 200ms;

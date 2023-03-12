@@ -15,7 +15,7 @@
   }
 
   &_shaked {
-    animation: shake 250ms ease-in;
+    animation: shake $shake-animation-duration ease-in;
   }
 
   &_shaked div {

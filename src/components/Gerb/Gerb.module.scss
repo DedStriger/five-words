@@ -1,0 +1,17 @@
+.gerb {
+  display: flex;
+  justify-content: center;
+
+  &__logo {
+    margin-top: 20px;
+    height: 40px;
+  }
+}
+
+@media (min-width: 600px) and (min-height: 600px) {
+  .gerb {
+    &__logo {
+      height: 50px;
+    }
+  }
+}

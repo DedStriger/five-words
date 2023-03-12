@@ -4,3 +4,8 @@ export type LineType = {
 };
 
 export type BoardType = string[][];
+
+export type GameType = {
+  gameOver: boolean;
+  win: boolean;
+};

@@ -12,15 +12,17 @@ type LineProps = {
 };
 
 const Line: FC<LineProps> = ({ linePos }) => {
-  const { lineShouldToShake } = useContext(BoardContext) as BoardContextType;
+  const { lineShouldToShake, winningLine } = useContext(BoardContext) as BoardContextType;
+  const isNotFoundLine = lineShouldToShake === linePos;
+  const isWinningLine = winningLine === linePos;
 
   return (
-    <div className={cl(styles.line, lineShouldToShake === linePos && styles.line_shaked)}>
-      <Cell cellPos={0} linePos={linePos} />
-      <Cell cellPos={1} linePos={linePos} />
-      <Cell cellPos={2} linePos={linePos} />
-      <Cell cellPos={3} linePos={linePos} />
-      <Cell cellPos={4} linePos={linePos} />
+    <div className={cl(styles.line, isNotFoundLine && styles.line_shaked)}>
+      <Cell cellPos={0} linePos={linePos} isNotFoundLine={isNotFoundLine} isWinningLine={isWinningLine} />
+      <Cell cellPos={1} linePos={linePos} isWinningLine={isWinningLine} />
+      <Cell cellPos={2} linePos={linePos} isWinningLine={isWinningLine} />
+      <Cell cellPos={3} linePos={linePos} isWinningLine={isWinningLine} />
+      <Cell cellPos={4} linePos={linePos} isWinningLine={isWinningLine} />
     </div>
   );
 };

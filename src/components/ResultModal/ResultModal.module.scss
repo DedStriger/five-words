@@ -1,0 +1,65 @@
+@import 'assets/styles/variables.scss';
+@import 'assets/styles/mixins.scss';
+
+.modal {
+  @include d-flex-f-column;
+  align-items: center;
+  padding-top: 32px;
+  padding-bottom: 32px;
+  flex-grow: 1;
+
+  &__title {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+    margin-bottom: 20px;
+    color: $yellow;
+  }
+
+  &__close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+  }
+
+  &__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 24px;
+    width: 24px;
+    background: $closebtn-background;
+    border-radius: 50%;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+    transition: box-shadow 0.2s ease-in;
+
+    &:active {
+      background: $closebtn-background-hover;
+    }
+
+    &:hover {
+      background: $closebtn-background-hover;
+    }
+  }
+}
+
+@media (min-width: 600px) and (min-height: 600px) {
+  .modal {
+    padding-top: 74px;
+    padding-bottom: 52px;
+
+    &__title {
+      font-size: 28px;
+    }
+
+    &__icon {
+      height: 26px;
+      width: 26px;
+    }
+
+    &__close {
+      top: 24px;
+      right: 32px;
+    }
+  }
+}
