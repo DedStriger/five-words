@@ -83,6 +83,12 @@
     border: 1px solid $cell-exact-border-color;
     animation: scale 1s ease-in-out;
   }
+
+  &_logo {
+    font-weight: 600;
+    font-size: calc(var(--tile-height) * 0.66);
+    border-radius: 4px;
+  }
 }
 
 @keyframes active {

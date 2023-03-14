@@ -29,6 +29,7 @@ export const useTimer: useTimerType = () => {
   }, []);
 
   useEffect(() => {
+    getTime();
     const interval = setInterval(() => {
       getTime();
     }, 1000);

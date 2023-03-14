@@ -17,10 +17,13 @@ const Tooltip: FC<TooltipProps> = ({ text, emoji, position }) => {
   );
 
   return (
-    <div className={computedClassNames}>
-      {text}
-      <div className={styles.tooltip__emoji}>{emoji}</div>
-    </div>
+    <>
+      <div className={computedClassNames}>
+        {text}
+        <div className={styles.tooltip__emoji}>{emoji}</div>
+      </div>
+      <div className={styles.tooltip__arrow}></div>
+    </>
   );
 };
 

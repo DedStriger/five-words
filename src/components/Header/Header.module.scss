@@ -1,0 +1,25 @@
+@import 'assets/styles/variables.scss';
+@import 'assets/styles/mixins.scss';
+
+.header {
+  &__line {
+    --gap: 2px;
+    --tile-height: 27px;
+    --tile-width: 25px;
+    display: flex;
+    gap: var(--gap);
+    width: calc(var(--tile-width) * 5 + var(--gap) * 4);
+    height: var(--tile-height);
+    font-size: calc(1rem + 5vw);
+  }
+}
+
+@media (min-width: 600px) and (min-height: 600px) {
+  .header {
+    &__line {
+      --gap: 4px;
+      --tile-height: 54px;
+      --tile-width: 50px;
+    }
+  }
+}

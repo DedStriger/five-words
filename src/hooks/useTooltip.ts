@@ -13,12 +13,7 @@ type useTooltipType = (
   containerRef: React.RefObject<HTMLDivElement>;
 };
 
-export const useTooltip: useTooltipType = (
-  isNotFoundCell,
-  isNotFoundLine,
-  closeDelay,
-  showDelay,
-) => {
+export const useTooltip: useTooltipType = (isNotFoundCell, isNotFoundLine, closeDelay, showDelay) => {
   const [isVisibleTooltip, setIsVisibleTooltip] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -48,8 +43,7 @@ export const useTooltip: useTooltipType = (
       const key = e.key.toUpperCase();
 
       const availableKeys = [...TOP_LINE, ...BOTTOM_LINE, ...MID_LINE];
-      const isKeyExists =
-        availableKeys.indexOf(key.toUpperCase()) > 0 || key === 'ENTER' || key === 'BACKSPACE';
+      const isKeyExists = availableKeys.indexOf(key.toUpperCase()) > 0 || key === 'ENTER' || key === 'BACKSPACE';
 
       if (isKeyExists) {
         setIsVisibleTooltip(false);
@@ -78,15 +72,11 @@ export const useTooltip: useTooltipType = (
   // show tooltip with delay when line notfound
   useEffect(() => {
     if (isNotFoundLine) {
-      const timeOut = setTimeout(() => {
+      setTimeout(() => {
         setIsVisibleTooltip(true);
       }, showDelay);
-
-      return () => {
-        clearTimeout(timeOut);
-      };
     }
-  }, [isNotFoundLine, showDelay]);
+  }, [isNotFoundLine, showDelay, isVisibleTooltip]);
 
   return { isVisibleTooltip, handleClick, containerRef };
 };

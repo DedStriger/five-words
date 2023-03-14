@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 
+import { BoardContext } from 'context/boardContext';
+
 import { useCharsState } from 'hooks/useCharsState';
 import { wordInWordsSet, getWordOfDay } from 'utils/word';
 import { sleep } from 'utils/helpers/sleep';
@@ -17,10 +19,10 @@ import { BoardType, GameType, LineType } from 'types/boardTypes';
 
 import KeyBoard from 'components/KeyBoard';
 import Board from '../components/Board';
-import { BoardContext } from 'context/boardContext';
 import ResultModal from 'components/ResultModal';
 import ResultBar from 'components/ResultBar';
 import Gerb from 'components/Gerb';
+import Header from 'components/Header';
 
 import './App.scss';
 
@@ -84,7 +86,6 @@ const App = () => {
       return;
     }
 
-    setIsEntered(false);
     setCurrentLine({ linepos: currentLine.linepos + 1, cellpos: 0 });
     await sleep(CHAR_FLIP_DELAY * CELLS_IN_LINE);
     getCharsState();
@@ -94,11 +95,13 @@ const App = () => {
       setWinningLine(currentLine.linepos);
       await sleep(1000);
       setIsGameOver({ gameOver: true, win: true });
+      setIsEntered(true);
       return;
     }
 
     if (currentLine.linepos === TOTAL_LINES) {
       setIsGameOver({ gameOver: true, win: false });
+      setIsEntered(true);
       return;
     }
   };
@@ -122,6 +125,7 @@ const App = () => {
         isGameOver,
         winningWord,
       });
+      setIsEntered(false);
     }
   }, [board, currentLine, emptyChars, exactChars, existsChars, isEntered, isGameOver, winningWord]);
 
@@ -141,14 +145,12 @@ const App = () => {
           existsChars,
           winningWord,
           lineShouldToShake,
-          setIsGameOver,
           winningLine,
         }}>
         <main className='play-zone'>
+          <Header />
           <Board />
           {isGameOver.gameOver ? <ResultBar /> : <KeyBoard />}
-          {/* <KeyBoard /> */}
-          {/* <ResultBar /> */}
           <Gerb />
         </main>
         <ResultModal isOpen={isResultModalOpen} setOpen={setIsResultModalOpen} />

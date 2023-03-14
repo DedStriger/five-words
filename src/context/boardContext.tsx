@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import { LineType, BoardType, GameType } from 'types/boardTypes';
+import { LineType, BoardType } from 'types/boardTypes';
 
 export type BoardContextType = {
   board: BoardType;
@@ -15,7 +15,6 @@ export type BoardContextType = {
   existsChars: string[];
   winningWord: string;
   lineShouldToShake: number | null;
-  setIsGameOver: (game: GameType) => void;
   winningLine: number | null;
 };
 

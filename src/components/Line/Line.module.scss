@@ -6,16 +6,14 @@
   column-gap: 6px;
   max-height: 118px;
   max-width: 568px;
-  width: 100%;
-  height: calc(100vw / 5);
-  font-size: calc(1rem + 5vw);
+  height: 100%;
 
   &:nth-last-child(1) {
     margin-bottom: 0;
   }
 
   &_shaked {
-    animation: shake $shake-animation-duration ease-in;
+    animation: shake 250ms ease-in;
   }
 
   &_shaked div {

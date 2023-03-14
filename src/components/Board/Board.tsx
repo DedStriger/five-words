@@ -6,7 +6,7 @@ import styles from './Board.module.scss';
 
 const Board: FC = () => {
   return (
-    <div className={styles.board}>
+    <div id='board' className={styles.board}>
       <Line linePos={0} />
       <Line linePos={1} />
       <Line linePos={2} />

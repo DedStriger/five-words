@@ -15,19 +15,21 @@ type CellProps = {
   linePos: number;
   isNotFoundLine?: boolean;
   isWinningLine: boolean;
+  value?: string;
 };
 
-const Cell: FC<CellProps> = ({ cellPos, linePos, isNotFoundLine, isWinningLine }) => {
+const Cell: FC<CellProps> = ({ cellPos, linePos, isNotFoundLine, isWinningLine, value }) => {
   const { board, winningWord, currentLine } = useContext(BoardContext) as BoardContextType;
 
-  const char = board[linePos][cellPos];
+  const char = value ?? board[linePos][cellPos];
 
-  const isPassedLine = currentLine.linepos > linePos;
-  const isActive = !isPassedLine && !!char;
-  const isExact = isPassedLine && winningWord[cellPos].toUpperCase() === char.toUpperCase();
+  const isPassedLine = !value && currentLine.linepos > linePos;
+  const isActive = !value && !isPassedLine && !!char;
+  const isExact = !value && isPassedLine && winningWord[cellPos].toUpperCase() === char.toUpperCase();
 
-  const isExists = isPassedLine && !isExact && winningWord.toUpperCase().indexOf(char.toUpperCase()) !== -1 && char !== '';
-  const isEmpty = isPassedLine && !isExact && !isExists;
+  const isExists =
+    !value && isPassedLine && !isExact && winningWord.toUpperCase().indexOf(char.toUpperCase()) !== -1 && char !== '';
+  const isEmpty = !value && isPassedLine && !isExact && !isExists;
   const isNotFoundCell = currentLine.linepos === linePos && cellPos === 0 && !!char;
 
   const { isVisibleTooltip, handleClick, containerRef } = useTooltip(
@@ -44,6 +46,7 @@ const Cell: FC<CellProps> = ({ cellPos, linePos, isNotFoundLine, isWinningLine }
     isExists && styles.cell_exists,
     isExact && styles.cell_exact,
     isWinningLine && styles.cell_win,
+    value && styles.cell_logo,
   );
 
   const renderTooltip = useMemo(() => {
