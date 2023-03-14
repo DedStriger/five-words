@@ -1,12 +1,13 @@
-import { FC } from 'react';
+import { FC, lazy } from 'react';
 import { createPortal } from 'react-dom';
 
 import { ReactComponent as CrossIc } from 'assets/images/cross.svg';
 
 import Timer from 'components/Timer';
-import BaseModal from 'components/BaseModal';
 
 import styles from './ResultModal.module.scss';
+
+const BaseModal = lazy(() => import('components/BaseModal'));
 
 type ResultModalProps = {
   isOpen: boolean;

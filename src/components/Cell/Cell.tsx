@@ -1,4 +1,4 @@
-import { FC, useContext, useMemo } from 'react';
+import { FC, useContext, useMemo, lazy, Suspense } from 'react';
 import cl from 'classnames';
 
 import { BoardContext, BoardContextType } from 'context/boardContext';
@@ -6,9 +6,9 @@ import { useTooltip } from 'hooks/useTooltip';
 import { EMPTY__TOOLTIP, EXACT__TOOLTIP, EXIST__TOOLTIP, NOTFOUND__TOOLTIP } from 'utils/constants/tooltipSettings';
 import { CELLS_IN_LINE, CHAR_FLIP_DELAY, LINE_SHAKE_DURATION } from 'utils/constants/boardSettings';
 
-import Tooltip from 'components/Tooltip';
-
 import styles from './Cell.module.scss';
+
+const Tooltip = lazy(() => import('components/Tooltip'));
 
 type CellProps = {
   cellPos: number;
@@ -82,10 +82,12 @@ const Cell: FC<CellProps> = ({ cellPos, linePos, isNotFoundLine, isWinningLine, 
 
   return (
     <div className={styles.root}>
-      <div className={computedClassNames} onClick={handleClick} ref={containerRef}>
-        {char}
-      </div>
-      {isVisibleTooltip && renderTooltip}
+      <Suspense>
+        <div className={computedClassNames} onClick={handleClick} ref={containerRef}>
+          {char}
+        </div>
+        {isVisibleTooltip && renderTooltip}
+      </Suspense>
     </div>
   );
 };
