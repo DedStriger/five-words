@@ -8,6 +8,11 @@
   justify-content: center;
 }
 
+@mixin d-flex-j-between-a-center {
+  @include d-flex-a-center;
+  justify-content: space-between;
+}
+
 @mixin d-flex-f-column {
   display: flex;
   flex-direction: column;

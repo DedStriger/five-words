@@ -6,6 +6,7 @@
   align-items: center;
   padding-top: 32px;
   padding-bottom: 32px;
+  gap: 14px;
   flex-grow: 1;
 
   &__title {
@@ -23,9 +24,6 @@
   }
 
   &__icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 24px;
     width: 24px;
     background: $closebtn-background;
@@ -41,12 +39,57 @@
       background: $closebtn-background-hover;
     }
   }
+
+  &__rightword {
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 31px;
+    margin-top: 8px;
+    margin-bottom: 6px;
+    text-align: center;
+    color: $yellow;
+    text-transform: uppercase;
+
+    &_title {
+      margin-top: -8px;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 21px;
+      text-align: center;
+    }
+  }
+}
+
+.attempts {
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 32px;
+  text-align: center;
+  color: #4e4e4e;
+  margin-top: 10px;
+
+  &__title {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 21px;
+    text-align: center;
+  }
+
+  &__wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__success {
+    color: $yellow;
+  }
 }
 
 @media (min-width: 600px) and (min-height: 600px) {
   .modal {
     padding-top: 74px;
     padding-bottom: 52px;
+    gap: 24px;
 
     &__title {
       font-size: 28px;

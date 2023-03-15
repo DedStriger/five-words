@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
 import { addZeroToTime } from 'utils/helpers/addZeroToTime';
+import { showNotification } from 'utils/notifications';
 
 type useTimerType = () => {
   hours: number | string;
@@ -22,6 +23,10 @@ export const useTimer: useTimerType = () => {
     tomorrowDate.setSeconds(0);
 
     const t = +tomorrowDate - +currentDate;
+
+    if (t === 0) {
+      showNotification();
+    }
 
     setHours(addZeroToTime(Math.floor((t / (1000 * 60 * 60)) % 24)));
     setMinutes(addZeroToTime(Math.floor((t / (1000 * 60)) % 60)));

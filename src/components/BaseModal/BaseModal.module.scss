@@ -14,6 +14,7 @@
 .overlay {
   @include d-flex-j-center-a-center;
   background-color: $modal-background;
+  color: $white;
   border-radius: 30px;
   position: fixed;
   top: 50%;

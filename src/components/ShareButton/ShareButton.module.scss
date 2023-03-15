@@ -1,0 +1,22 @@
+@import 'assets/styles/variables.scss';
+@import 'assets/styles/mixins.scss';
+
+.share {
+  @include d-flex-j-center-a-center;
+  height: 40px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 21px;
+  white-space: nowrap;
+  margin: 14px auto 0;
+  width: 80%;
+  color: $share-button-color;
+  border: 1px solid $share-button-border-color;
+
+  &:active {
+    background: #333;
+    color: $share-button-color-active;
+    border-color: $share-button-border-color-active;
+  }
+}

@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
+import cl from 'classnames';
 
 import { BoardContext } from 'context/boardContext';
 
@@ -100,7 +101,7 @@ const App = () => {
       return;
     }
 
-    if (currentLine.linepos === TOTAL_LINES) {
+    if (currentLine.linepos + 1 === TOTAL_LINES) {
       setIsGameOver({ gameOver: true, win: false });
       setIsEntered(true);
       return;
@@ -131,7 +132,7 @@ const App = () => {
   }, [board, currentLine, emptyChars, exactChars, existsChars, isEntered, isGameOver, winningWord]);
 
   return (
-    <div className='app'>
+    <div className={cl('app', isResultModalOpen && 'app__blur')}>
       <BoardContext.Provider
         value={{
           board,
@@ -152,10 +153,16 @@ const App = () => {
           <main className='play-zone'>
             <Header />
             <Board />
-            {isGameOver.gameOver ? <ResultBar /> : <KeyBoard />}
+            {isGameOver.gameOver ? <ResultBar isWinning={isGameOver.win} /> : <KeyBoard />}
             <Gerb />
           </main>
-          <ResultModal isOpen={isResultModalOpen} setOpen={setIsResultModalOpen} />
+          <ResultModal
+            isOpen={isResultModalOpen}
+            setOpen={setIsResultModalOpen}
+            winningLine={currentLine.linepos}
+            isWinning={isGameOver.win}
+            winningWord={winningWord}
+          />
         </Suspense>
       </BoardContext.Provider>
     </div>

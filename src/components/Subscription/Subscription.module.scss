@@ -1,0 +1,14 @@
+@import 'assets/styles/variables.scss';
+@import 'assets/styles/mixins.scss';
+
+.subscription {
+  @include d-flex-j-between-a-center;
+  background-color: $field-background;
+  border-radius: 24px;
+  padding: 14px 20px;
+  gap: 16px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  width: 100%;
+}
