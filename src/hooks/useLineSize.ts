@@ -12,31 +12,31 @@ type useLineSizeType = (
 
 export const useLineSize: useLineSizeType = (gap, percent) => {
   const lineRef = useRef<HTMLDivElement>(null);
-  const [lineHeight, setLineHeight] = useState(0);
 
-  const board = document.querySelector('#board') as HTMLElement;
-  const boardWidth = board?.clientWidth;
-  const lineWidth = (lineHeight - (lineHeight * percent) / 100) * CELLS_IN_LINE + gap * (CELLS_IN_LINE - 1);
+  const [width, setWidth] = useState(0);
+  const [fontSize, setFontSize] = useState(0);
 
-  const finallyWidth = lineWidth > boardWidth ? boardWidth : lineWidth;
-  const fontSize = lineHeight / 2;
+  const onWidth = useCallback(() => {
+    const lineHeight = lineRef.current ? lineRef.current?.clientHeight : 0;
+    const lineWidth = (lineHeight - (lineHeight * percent) / 100) * CELLS_IN_LINE + gap * (CELLS_IN_LINE - 1);
 
-  const onLineHeight = useCallback(() => {
-    if (lineRef.current) {
-      const curHeight = lineRef.current?.clientHeight;
-      setLineHeight(curHeight);
-    }
-  }, []);
+    const board = document.querySelector('#board') as HTMLElement;
+    const boardWidth = board?.clientWidth;
+    const finallyWidth = lineWidth > boardWidth ? boardWidth : lineWidth;
+
+    setWidth(finallyWidth);
+    setFontSize(lineHeight / 2);
+  }, [gap, percent]);
 
   useEffect(() => {
-    window.addEventListener('resize', onLineHeight);
+    window.addEventListener('resize', onWidth);
 
     return () => {
-      window.removeEventListener('resize', onLineHeight);
+      window.removeEventListener('resize', onWidth);
     };
-  }, [onLineHeight]);
+  }, [onWidth]);
 
-  useEffect(() => onLineHeight(), [onLineHeight]);
+  useEffect(() => onWidth(), [onWidth]);
 
-  return { finallyWidth, fontSize, lineRef };
+  return { finallyWidth: width, fontSize, lineRef };
 };

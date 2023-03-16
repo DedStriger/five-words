@@ -23,8 +23,6 @@ type ResultModalProps = {
 };
 
 const ResultModal: FC<ResultModalProps> = ({ isOpen, setOpen, winningLine, isWinning, winningWord }) => {
-  const rootRef = document.getElementById('root') as HTMLElement;
-
   const handleCloseModal = () => {
     setOpen(false);
   };
@@ -63,7 +61,7 @@ const ResultModal: FC<ResultModalProps> = ({ isOpen, setOpen, winningLine, isWin
         </div>
       </BaseModal>
     ),
-    rootRef,
+    document.body,
   );
 };
 

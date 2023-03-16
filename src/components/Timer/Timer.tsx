@@ -9,8 +9,7 @@ const Timer = () => {
     <div className={styles.timer}>
       <div className={styles.timer__title}>Новое слово появится через:</div>
       <div className={styles.timer__clock}>
-        <div className={styles.timer__digit}>{hours}</div>:
-        <div className={styles.timer__digit}>{minutes}</div>:
+        <div className={styles.timer__digit}>{hours}</div>:<div className={styles.timer__digit}>{minutes}</div>:
         <div className={styles.timer__digit}>{seconds}</div>
       </div>
     </div>
