@@ -17,16 +17,18 @@ export const useLineSize: useLineSizeType = (gap, percent) => {
   const [fontSize, setFontSize] = useState(0);
 
   const onWidth = useCallback(() => {
-    const lineHeight = lineRef.current ? lineRef.current?.clientHeight : 0;
+    const lineHeight = lineRef.current?.clientHeight as number;
     const lineWidth = (lineHeight - (lineHeight * percent) / 100) * CELLS_IN_LINE + gap * (CELLS_IN_LINE - 1);
 
     const board = document.querySelector('#board') as HTMLElement;
-    const boardWidth = board?.clientWidth;
+    const boardWidth = board.clientWidth;
     const finallyWidth = lineWidth > boardWidth ? boardWidth : lineWidth;
 
     setWidth(finallyWidth);
     setFontSize(lineHeight / 2);
   }, [gap, percent]);
+
+  useLayoutEffect(() => onWidth(), [onWidth]);
 
   useEffect(() => {
     window.addEventListener('resize', onWidth);
@@ -35,8 +37,6 @@ export const useLineSize: useLineSizeType = (gap, percent) => {
       window.removeEventListener('resize', onWidth);
     };
   }, [onWidth]);
-
-  useLayoutEffect(() => onWidth(), [onWidth]);
 
   return { finallyWidth: width, fontSize, lineRef };
 };
