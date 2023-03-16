@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { CELLS_IN_LINE } from 'utils/constants/boardSettings';
 
 type useLineSizeType = (
@@ -36,7 +36,7 @@ export const useLineSize: useLineSizeType = (gap, percent) => {
     };
   }, [onWidth]);
 
-  useEffect(() => onWidth(), [onWidth]);
+  useLayoutEffect(() => onWidth(), [onWidth]);
 
   return { finallyWidth: width, fontSize, lineRef };
 };
