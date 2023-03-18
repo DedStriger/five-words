@@ -1,51 +1,55 @@
-import { useRef, useState, useEffect, useCallback, useLayoutEffect } from 'react';
-import { CELLS_IN_LINE } from 'utils/constants/boardSettings';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
-type useLineSizeType = (
-  gap: number,
-  percent: number,
-) => {
-  finallyWidth: number;
+import { BOARD_HORIZONTAL_GAP, BOARD_VERTICAL_GAP, CELLS_IN_LINE, TOTAL_LINES } from 'utils/constants/boardSettings';
+import { getBoardSize } from 'utils/helpers/getBoardSize';
+
+type useLineSizeType = () => {
+  containerRef: React.RefObject<HTMLDivElement>;
+  containerSize: { width: number; height: number };
   fontSize: number;
-  lineRef: React.RefObject<HTMLDivElement>;
 };
 
-export const useLineSize: useLineSizeType = (gap, percent) => {
-  const lineRef = useRef<HTMLDivElement>(null);
+export const useBoardSize: useLineSizeType = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const timeRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [width, setWidth] = useState(0);
+  const [sizes, setSizes] = useState({ width: 0, height: 0 });
   const [fontSize, setFontSize] = useState(0);
 
-  const onWidth = useCallback(() => {
-    const lineHeight = lineRef.current?.clientHeight as number;
-    const lineWidth = (lineHeight - (lineHeight * percent) / 100) * CELLS_IN_LINE + gap * (CELLS_IN_LINE - 1);
+  const onSizes = useCallback(() => {
+    if ((timeRef.current && clearTimeout(timeRef.current), containerRef.current)) {
+      const container = containerRef.current;
+      const x = container.clientWidth;
+      const y = container.clientHeight;
+      const totalRowGap = (CELLS_IN_LINE - 1) * BOARD_HORIZONTAL_GAP;
+      const totalColumnGap = (TOTAL_LINES - 1) * BOARD_VERTICAL_GAP;
 
-    const board = document.querySelector('#board') as HTMLElement;
-    const boardWidth = board.clientWidth;
-    const finallyWidth = lineWidth > boardWidth ? boardWidth : lineWidth;
+      const cellSizes = getBoardSize((x - totalRowGap) / CELLS_IN_LINE, (y - totalColumnGap) / TOTAL_LINES);
+      const width = cellSizes.width;
+      const height = cellSizes.height;
 
-    if (finallyWidth <= 0) {
-      timeRef.current = setTimeout(() => {
-        onWidth();
-      });
-    } else {
-      setWidth(finallyWidth);
-      setFontSize(lineHeight / 2);
+      if (width <= 1 || height <= 1) {
+        timeRef.current = setTimeout(() => {
+          onSizes();
+        });
+      } else {
+        setSizes({
+          width: width * CELLS_IN_LINE + totalRowGap,
+          height: height * TOTAL_LINES + totalColumnGap,
+        });
+        setFontSize(height / 2);
+      }
     }
-  }, [gap, percent]);
-
-  // useLayoutEffect(() => onWidth(), [onWidth]);
+  }, []);
 
   useEffect(() => {
-    onWidth();
-
-    window.addEventListener('resize', onWidth);
+    onSizes();
+    window.addEventListener('resize', onSizes);
 
     return () => {
-      window.removeEventListener('resize', onWidth);
+      window.removeEventListener('resize', onSizes);
     };
-  }, [onWidth]);
+  }, [onSizes]);
 
   useEffect(() => {
     return () => {
@@ -55,5 +59,5 @@ export const useLineSize: useLineSizeType = (gap, percent) => {
     };
   }, []);
 
-  return { finallyWidth: width, fontSize, lineRef };
+  return { containerRef, containerSize: sizes, fontSize };
 };

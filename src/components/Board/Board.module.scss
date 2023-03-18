@@ -7,4 +7,21 @@
   align-items: center;
   width: 100%;
   padding: 26px 0;
+
+  &__wrapper {
+    width: 100%;
+    flex-grow: 1;
+    @include d-flex-f-column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  &__lines {
+    @include d-flex-f-column;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
