@@ -12,6 +12,7 @@ type useLineSizeType = (
 
 export const useLineSize: useLineSizeType = (gap, percent) => {
   const lineRef = useRef<HTMLDivElement>(null);
+  const timeRef = useRef<NodeJS.Timeout | null>(null);
 
   const [width, setWidth] = useState(0);
   const [fontSize, setFontSize] = useState(0);
@@ -24,19 +25,35 @@ export const useLineSize: useLineSizeType = (gap, percent) => {
     const boardWidth = board.clientWidth;
     const finallyWidth = lineWidth > boardWidth ? boardWidth : lineWidth;
 
-    setWidth(finallyWidth);
-    setFontSize(lineHeight / 2);
+    if (finallyWidth <= 0) {
+      timeRef.current = setTimeout(() => {
+        onWidth();
+      });
+    } else {
+      setWidth(finallyWidth);
+      setFontSize(lineHeight / 2);
+    }
   }, [gap, percent]);
 
-  useLayoutEffect(() => onWidth(), [onWidth]);
+  // useLayoutEffect(() => onWidth(), [onWidth]);
 
   useEffect(() => {
+    onWidth();
+
     window.addEventListener('resize', onWidth);
 
     return () => {
       window.removeEventListener('resize', onWidth);
     };
   }, [onWidth]);
+
+  useEffect(() => {
+    return () => {
+      if (timeRef.current) {
+        clearTimeout(timeRef.current);
+      }
+    };
+  }, []);
 
   return { finallyWidth: width, fontSize, lineRef };
 };
