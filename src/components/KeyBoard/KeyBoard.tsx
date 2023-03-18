@@ -8,9 +8,7 @@ import Key from 'components/Key';
 import styles from './KeyBoard.module.scss';
 
 const KeyBoard: FC = () => {
-  const { onAddChar, onDeleteChar, onEnter, currentLine } = useContext(
-    BoardContext,
-  ) as BoardContextType;
+  const { onAddChar, onDeleteChar, onEnter, currentLine } = useContext(BoardContext) as BoardContextType;
 
   const onClick = useCallback(
     (value: string) => {
@@ -35,7 +33,7 @@ const KeyBoard: FC = () => {
         onDeleteChar();
       } else {
         const availableKeys = [...TOP_LINE, ...BOTTOM_LINE, ...MID_LINE];
-        const isKeyExists = availableKeys.indexOf(key.toUpperCase()) > 0;
+        const isKeyExists = availableKeys.includes(key.toUpperCase());
 
         if (isKeyExists) {
           onAddChar(key);

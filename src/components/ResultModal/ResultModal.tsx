@@ -1,4 +1,4 @@
-import { FC, lazy } from 'react';
+import { FC, lazy, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import cl from 'classnames';
 
@@ -23,13 +23,32 @@ type ResultModalProps = {
 };
 
 const ResultModal: FC<ResultModalProps> = ({ isOpen, setOpen, winningLine, isWinning, winningWord }) => {
+  const modalWrapperRef = useRef<HTMLDivElement>(null);
+
   const handleCloseModal = () => {
     setOpen(false);
   };
 
+  const closeModalListener = useCallback(
+    (e: MouseEvent) => {
+      if (!modalWrapperRef.current?.contains(e.target as HTMLDivElement)) {
+        setOpen(false);
+      }
+    },
+    [setOpen],
+  );
+
+  useEffect(() => {
+    if (modalWrapperRef.current) {
+      document.addEventListener('click', closeModalListener);
+
+      return () => document.removeEventListener('click', closeModalListener);
+    }
+  }, [closeModalListener]);
+
   return createPortal(
     isOpen && (
-      <BaseModal>
+      <BaseModal ref={modalWrapperRef}>
         <div className={styles.modal}>
           <div className={styles.modal__close}>
             <button className={styles.modal__icon} onClick={handleCloseModal}>

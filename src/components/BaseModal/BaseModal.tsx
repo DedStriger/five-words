@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { forwardRef } from 'react';
 
 import styles from './BaseModal.module.scss';
 
@@ -6,12 +6,16 @@ type BaseModalProps = {
   children: React.ReactNode;
 };
 
-const BaseModal: FC<BaseModalProps> = ({ children }) => {
+type Ref = HTMLDivElement;
+
+const BaseModal = forwardRef<Ref, BaseModalProps>(({ children }, ref) => {
   return (
     <div className={styles.root}>
-      <div className={styles.overlay}>{children}</div>
+      <div ref={ref} className={styles.overlay}>
+        {children}
+      </div>
     </div>
   );
-};
+});
 
 export default BaseModal;
