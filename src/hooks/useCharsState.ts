@@ -12,6 +12,7 @@ type useCharsStateType = (
   emptyChars: string[];
   existsChars: string[];
   getCharsState: () => void;
+  clear: () => void
 };
 
 export const useCharsState: useCharsStateType = (winningWord, board) => {
@@ -48,5 +49,9 @@ export const useCharsState: useCharsStateType = (winningWord, board) => {
     });
   }, [board, winningWord]);
 
-  return { exactChars, emptyChars, existsChars, getCharsState };
+  return { exactChars, emptyChars, existsChars, getCharsState, clear: () => {
+      setExactChars([])
+      setEmptyChars([])
+      setExistsChars([])
+    } };
 };

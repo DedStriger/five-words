@@ -18,7 +18,7 @@ export const useTimer: useTimerType = () => {
     const currentDate = new Date();
     const tomorrowDate = new Date();
 
-    tomorrowDate.setHours(24);
+    tomorrowDate.setHours(0);
     tomorrowDate.setMinutes(0);
     tomorrowDate.setSeconds(0);
 

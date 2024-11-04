@@ -1,10 +1,10 @@
-import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import cl from 'classnames';
 
 import { BoardContext } from 'context/boardContext';
 
 import { useCharsState } from 'hooks/useCharsState';
-import { wordInWordsSet, getWordOfDay } from 'utils/word';
+import { wordInWordsSet } from 'utils/word';
 import { sleep } from 'utils/helpers/sleep';
 import {
   INITIAL_BOARD,
@@ -24,28 +24,64 @@ import ResultModal from 'components/ResultModal';
 import Header from 'components/Header';
 
 import './App.scss';
+import { WORDS } from '../utils/constants/wordsList';
 
-const ResultBar = lazy(() => import('components/ResultBar'));
+const LOCAL_STORAGE_KEY = 'banWords';
+const END = 'end-game';
+
+const getWord = () => {
+  const banWords: string[] = window.localStorage.getItem(LOCAL_STORAGE_KEY)?.split('|') || [];
+  return WORDS.filter((i) => !banWords.includes(i))[0] || END;
+};
 
 const App = () => {
-  const winningWord = useMemo(() => getWordOfDay(), []);
-
+  const [winningWord, setWinningWord] = useState(getWord());
   const [board, setBoard] = useState<BoardType>(
     useMemo(() => getFieldFromLocalStorage<BoardType>('board', winningWord) ?? INITIAL_BOARD, [winningWord]),
   );
+
   const [currentLine, setCurrentLine] = useState(
     useMemo(() => getFieldFromLocalStorage<LineType>('currentLine', winningWord) ?? INITIAL_CURRENT_LINE, [winningWord]),
   );
   const [isGameOver, setIsGameOver] = useState(
     useMemo(() => getFieldFromLocalStorage<GameType>('isGameOver', winningWord) ?? INITIAL_GAME_STATE, [winningWord]),
   );
+
   const [lineShouldToShake, setLineShouldToShake] = useState<number | null>(null);
   const [winningLine, setWinningLine] = useState<number | null>(null);
   const [isEntered, setIsEntered] = useState(false);
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
 
-  const { exactChars, emptyChars, existsChars, getCharsState } = useCharsState(winningWord, board);
-
+  const { exactChars, emptyChars, existsChars, getCharsState, clear } = useCharsState(winningWord, board);
+  const reset = () => {
+    setBoard(INITIAL_BOARD);
+    setCurrentLine(INITIAL_CURRENT_LINE);
+    setIsGameOver(INITIAL_GAME_STATE);
+    clear();
+    setWinningLine(null);
+    setLineShouldToShake(null);
+    setIsEntered(false);
+    const word = getWord();
+    window.localStorage.setItem(
+      'gameInfo',
+      JSON.stringify({
+        board: INITIAL_BOARD,
+        currentLine: {
+          linepos: 0,
+          cellpos: 0,
+        },
+        existsChars: [],
+        exactChars: [],
+        emptyChars: [],
+        isGameOver: {
+          gameOver: false,
+          win: false,
+        },
+        winningWord: word,
+      }),
+    );
+    setWinningWord(word);
+  };
   const onAddChar = (value: string) => {
     if (currentLine.cellpos >= CELLS_IN_LINE) {
       return;
@@ -97,12 +133,14 @@ const App = () => {
       await sleep(1000);
       setIsGameOver({ gameOver: true, win: true });
       setIsEntered(true);
+      window.localStorage.setItem(LOCAL_STORAGE_KEY, `${window.localStorage.getItem(LOCAL_STORAGE_KEY) || ''}${winningWord}|`);
       return;
     }
 
     if (currentLine.linepos + 1 === TOTAL_LINES) {
       setIsGameOver({ gameOver: true, win: false });
       setIsEntered(true);
+      window.localStorage.setItem(LOCAL_STORAGE_KEY, `${window.localStorage.getItem(LOCAL_STORAGE_KEY) || ''}${winningWord}|`);
       return;
     }
   };
@@ -150,12 +188,33 @@ const App = () => {
         }}>
         <Suspense>
           <main className='play-zone'>
-            <Header />
-            <Board />
-            <KeyBoard />
+            {winningWord === END ? (
+              <>
+                <Header />
+                <p
+                  style={{
+                    fontSize: 20,
+                    flex: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                  }}>
+                  Слов больше нет) Скоро добавим еще!
+                </p>{' '}
+                <KeyBoard />
+              </>
+            ) : (
+              <>
+                <Header />
+                <Board />
+                <KeyBoard />
+              </>
+            )}
           </main>
           <ResultModal
             isOpen={isResultModalOpen}
+            reset={reset}
             setOpen={setIsResultModalOpen}
             winningLine={currentLine.linepos}
             isWinning={isGameOver.win}
