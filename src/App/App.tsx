@@ -53,19 +53,31 @@ const App = () => {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
 
   const { exactChars, emptyChars, existsChars, getCharsState, clear } = useCharsState(winningWord, board);
-  const reset = () => {
-    setBoard(INITIAL_BOARD);
+  const reset = (from: string) => {
+    setBoard([
+      ['', '', '', '', ''],
+      ['', '', '', '', ''],
+      ['', '', '', '', ''],
+      ['', '', '', '', ''],
+      ['', '', '', '', ''],
+      ['', '', '', '', ''],
+    ]);
     setCurrentLine(INITIAL_CURRENT_LINE);
     setIsGameOver(INITIAL_GAME_STATE);
     clear();
     setWinningLine(null);
     setLineShouldToShake(null);
-    setIsEntered(false);
     const word = getWord();
-    window.localStorage.setItem(
-      'gameInfo',
-      JSON.stringify({
-        board: INITIAL_BOARD,
+    saveGameStateToLocalStorage(
+      {
+        board: [
+          ['', '', '', '', ''],
+          ['', '', '', '', ''],
+          ['', '', '', '', ''],
+          ['', '', '', '', ''],
+          ['', '', '', '', ''],
+          ['', '', '', '', ''],
+        ],
         currentLine: {
           linepos: 0,
           cellpos: 0,
@@ -78,12 +90,13 @@ const App = () => {
           win: false,
         },
         winningWord: word,
-      }),
+      },
+      'reset ' + from,
     );
     setWinningWord(word);
   };
   const onAddChar = (value: string) => {
-    if (currentLine.cellpos >= CELLS_IN_LINE) {
+    if (currentLine.cellpos >= CELLS_IN_LINE || isGameOver.gameOver) {
       return;
     }
 
@@ -99,7 +112,7 @@ const App = () => {
   };
 
   const onDeleteChar = () => {
-    if (currentLine.cellpos === 0) {
+    if (currentLine.cellpos === 0 || isGameOver.gameOver) {
       return;
     }
     const copyBoard = [...board];
@@ -132,14 +145,16 @@ const App = () => {
       setWinningLine(currentLine.linepos);
       await sleep(1000);
       setIsGameOver({ gameOver: true, win: true });
-      setIsEntered(true);
+      setIsEntered(false);
       window.localStorage.setItem(LOCAL_STORAGE_KEY, `${window.localStorage.getItem(LOCAL_STORAGE_KEY) || ''}${winningWord}|`);
       return;
     }
 
     if (currentLine.linepos + 1 === TOTAL_LINES) {
+      await sleep(1000);
+      setIsEntered(false);
       setIsGameOver({ gameOver: true, win: false });
-      setIsEntered(true);
+      setIsEntered(false);
       window.localStorage.setItem(LOCAL_STORAGE_KEY, `${window.localStorage.getItem(LOCAL_STORAGE_KEY) || ''}${winningWord}|`);
       return;
     }
@@ -155,15 +170,18 @@ const App = () => {
 
   useEffect(() => {
     if (isEntered) {
-      saveGameStateToLocalStorage({
-        board,
-        currentLine,
-        existsChars,
-        exactChars,
-        emptyChars,
-        isGameOver,
-        winningWord,
-      });
+      saveGameStateToLocalStorage(
+        {
+          board,
+          currentLine,
+          existsChars,
+          exactChars,
+          emptyChars,
+          isGameOver,
+          winningWord,
+        },
+        'enter',
+      );
       setIsEntered(false);
     }
   }, [board, currentLine, emptyChars, exactChars, existsChars, isEntered, isGameOver, winningWord]);

@@ -10,7 +10,8 @@ type gameInfoType = () => {
   winningWord: string;
 };
 
-export const saveGameStateToLocalStorage = (gameInfo: ReturnType<typeof loadGameStateFromLocalStorage>) => {
+export const saveGameStateToLocalStorage = (gameInfo: ReturnType<typeof loadGameStateFromLocalStorage>, from: string) => {
+  //console.log('set', from, gameInfo.board);
   localStorage.setItem('gameInfo', JSON.stringify(gameInfo));
 };
 
@@ -28,6 +29,5 @@ export const getFieldFromLocalStorage = <T>(
   if (state.winningWord !== winningWord?.toLowerCase()) {
     return null;
   }
-
   return state[field] as T;
 };

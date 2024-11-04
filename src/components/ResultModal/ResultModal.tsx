@@ -17,22 +17,22 @@ type ResultModalProps = {
   winningLine: number;
   isWinning: boolean;
   winningWord: string;
-  reset: () => void
+  reset: (v: string) => void;
 };
 
 const ResultModal: FC<ResultModalProps> = ({ isOpen, setOpen, reset, winningLine, isWinning, winningWord }) => {
   const modalWrapperRef = useRef<HTMLDivElement>(null);
 
   const handleCloseModal = () => {
+    reset('result');
     setOpen(false);
-    reset()
   };
 
   const closeModalListener = useCallback(
     (e: MouseEvent) => {
       if (!modalWrapperRef.current?.contains(e.target as HTMLDivElement)) {
+        reset('closeModalListener');
         setOpen(false);
-        reset()
       }
     },
     [setOpen, reset],
