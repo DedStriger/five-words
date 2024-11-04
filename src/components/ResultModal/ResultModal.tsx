@@ -5,9 +5,6 @@ import cl from 'classnames';
 import { ReactComponent as CrossIc } from 'assets/images/cross.svg';
 
 import { TOTAL_LINES } from 'utils/constants/boardSettings';
-
-import Timer from 'components/Timer';
-import Subscription from 'components/Subscription';
 import ShareButton from 'components/ShareButton';
 
 import styles from './ResultModal.module.scss';
@@ -62,8 +59,6 @@ const ResultModal: FC<ResultModalProps> = ({ isOpen, setOpen, winningLine, isWin
               <div className={styles.modal__rightword}>{winningWord}</div>
             </div>
           )}
-          <Timer />
-          <Subscription />
           {isWinning && (
             <>
               <div className={styles.attempts__title}>

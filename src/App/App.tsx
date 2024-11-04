@@ -21,7 +21,6 @@ import { BoardType, GameType, LineType } from 'types/boardTypes';
 import KeyBoard from 'components/KeyBoard';
 import Board from '../components/Board';
 import ResultModal from 'components/ResultModal';
-import Gerb from 'components/Gerb';
 import Header from 'components/Header';
 
 import './App.scss';
@@ -153,8 +152,7 @@ const App = () => {
           <main className='play-zone'>
             <Header />
             <Board />
-            {isGameOver.gameOver ? <ResultBar isWinning={isGameOver.win} /> : <KeyBoard />}
-            <Gerb />
+            <KeyBoard />
           </main>
           <ResultModal
             isOpen={isResultModalOpen}
